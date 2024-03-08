@@ -59,3 +59,4 @@ Moving/renaming paths such as the `mnist-datasets/` directory or modifying its c
 Obviously, you can easily revert to an earlier project state via `git revert` in case you break something by accident.
 
 Good luck!
+This is submission of our group
