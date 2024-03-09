@@ -31,11 +31,11 @@ void fc_layer::adjust_weights(const double learning_rate)
 	{
 		for (auto j = 0; j < weights_[i].size(); j++)
 		{
-			weights_[i][j].value -= learning_rate * weights_[i][j].delta;
+			weights_[i][j].value -= learning_rate*10 * weights_[i][j].delta;
 			weights_[i][j].delta = 0.0;
 		}
 	}
-	bias_.value -= learning_rate * bias_.delta;
+	bias_.value -= learning_rate*10 * bias_.delta;
 	bias_.delta = 0.0;
 }
 #include <iostream>
@@ -43,14 +43,12 @@ void fc_layer::forward(const layer& prev)
 {
 #pragma omp parallel for
 
-    double minValue = 0;
 	for (auto i = 0; i < neurons_.size(); i++)
 	{
 		neurons_[i] = bias_.value;
 		for (auto j = 0; j < prev.size(); j++)
 		{
 			neurons_[i] += prev[j] * weights_[i][j].value;
-
 		}
 	}
 	apply_activation_function();
