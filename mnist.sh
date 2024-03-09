@@ -6,3 +6,4 @@ cmake ..
 make
 cd ../
 exec ./AdvPT $1
+rm -rf build

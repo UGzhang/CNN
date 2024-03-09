@@ -1,0 +1,16 @@
+/cmake-build-debug
+/cmake-build-release
+/build
+/.idea
+*/cmake-build-debug
+*/cmake-build-release
+*/build
+*/.idea
+/mnist-configs
+AdvPT
+MnistData
+image_out.txt
+label_out.txt
+log_predictions-ci.txt
+log_predictions.txt
+.clang-format

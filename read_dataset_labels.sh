@@ -7,3 +7,4 @@ cmake ..
 make
 cd ../../
 exec ./MnistData $1 $2 $3
+rm -rf build
