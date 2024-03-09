@@ -15,11 +15,11 @@ namespace mnist_reader
 		return s;
 	}
 
-	static std::tuple<vector<vector<uint8_t>>, vector<uint8_t>> read(const std::string& image_file,
-	                                                                 const std::string& label_file)
+	static std::tuple<vector<vector<uint8_t>>, vector<uint8_t>> read(std::string_view image_file,
+	                                                                 std::string_view label_file)
 	{
 		std::ifstream ifs_images(image_file.data(), std::ifstream::in | std::ifstream::binary);
-		if (!ifs_images.is_open()) throw std::runtime_error("Can't open image file '"s + image_file + "'."s);
+		if (!ifs_images.is_open()) throw std::runtime_error("Can't open image file '"s + image_file.data() + "'."s);
 
 		int32_t magic;
 		int32_t num_images;
@@ -28,16 +28,16 @@ namespace mnist_reader
 
 		ifs_images % magic % num_images % num_rows % num_cols;
 
-		if (magic != 2051) throw std::runtime_error("'"s + label_file + "' - wrong file format"s);
+		if (magic != 2051) throw std::runtime_error("'"s + label_file.data() + "' - wrong file format"s);
 
 		std::ifstream ifs_labels(label_file.data(), std::ifstream::in | std::ifstream::binary);
-		if (!ifs_labels.is_open()) throw std::runtime_error("Can't open image file '"s + label_file + "'."s);
+		if (!ifs_labels.is_open()) throw std::runtime_error("Can't open image file '"s + label_file.data() + "'."s);
 
 		int32_t num_labels;
 
 		ifs_labels % magic % num_labels;
 
-		if (magic != 2049) throw std::runtime_error("'"s + label_file + "' - wrong file format"s);
+		if (magic != 2049) throw std::runtime_error("'"s + label_file.data() + "' - wrong file format"s);
 
 		vector<vector<uint8_t>> images(num_images, vector<uint8_t>(num_rows * num_cols));
 		vector<uint8_t> labels(num_labels);
@@ -51,12 +51,12 @@ namespace mnist_reader
 		return {images, labels};
 	}
 
-    static vector<uint8_t> readLable(const std::string& label_file)
+    static vector<uint8_t> readLable(std::string_view label_file)
     {
 
 
         std::ifstream ifs_labels(label_file.data(), std::ifstream::in | std::ifstream::binary);
-        if (!ifs_labels.is_open()) throw std::runtime_error("Can't open image file '"s + label_file + "'."s);
+        if (!ifs_labels.is_open()) throw std::runtime_error("Can't open image file '"s + label_file.data() + "'."s);
 
         int32_t num_labels;
         int32_t magic;
@@ -73,10 +73,10 @@ namespace mnist_reader
         return  labels;
     }
 
-    static vector<vector<uint8_t>> readImage(const std::string& image_file)
+    static vector<vector<uint8_t>> readImage(std::string_view image_file)
     {
         std::ifstream ifs_images(image_file.data(), std::ifstream::in | std::ifstream::binary);
-        if (!ifs_images.is_open()) throw std::runtime_error("Can't open image file '"s + image_file + "'."s);
+        if (!ifs_images.is_open()) throw std::runtime_error("Can't open image file '"s + image_file.data() + "'."s);
 
         int32_t magic;
         int32_t num_images;

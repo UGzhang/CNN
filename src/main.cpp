@@ -1,12 +1,21 @@
-#include "../extract-data/utils.h"
-#include "../extract-data/mnist_reader.h"
-#include "sequantial.h"
 #include <filesystem>
 #include <iostream>
 #include "operate_config.h"
+#include <Eigen/Dense>
+#include <algorithm>
+#include <iostream>
+
+#include "layer.h"
+#include "fully_connected.h"
+#include "relu.h"
+#include "softmax.h"
+#include "loss.h"
+#include "cross_entropy_loss.h"
+#include "mnist.h"
+#include "network.h"
+#include "sgd.h"
 
 using std::cout;
-namespace fs = std::filesystem;
 
 int main(int argc, char* argv[])
 {
@@ -25,41 +34,65 @@ int main(int argc, char* argv[])
     std::string rel_path_test_labels = ConfigHandle.read("rel_path_test_labels", std::string{});
     std::string rel_path_log_file = ConfigHandle.read("rel_path_log_file", std::string{});
 
+    MNIST dataset{};
+    dataset.readData(rel_path_train_images, true);
+    dataset.readData(rel_path_test_images, false);
+    dataset.readLabel(rel_path_train_labels, true);
+    dataset.readLabel(rel_path_test_labels, false);
 
-		cout << "Loading data...\n";
+    int n_train = dataset.train_data.cols();
+    int dim_in = dataset.train_data.rows();
+    std::cout << "mnist train number: " << n_train << std::endl;
+    std::cout << "mnist test number: " << dataset.test_labels.cols() << std::endl;
 
-//		auto [train_images, train_labels] = mnist_reader::read(
-//			rel_path_train_images,
-//			rel_path_train_labels
-//		);
+    Network fcnn;
+    Layer* fc1 = new FullyConnected(dim_in,hidden_size);
+    Layer* relu1 = new ReLU;
+    Layer* fc2 = new FullyConnected(hidden_size,10);
+    Layer* softmax = new Softmax;
+    fcnn.add_layer(fc1);
+    fcnn.add_layer(relu1);
+    fcnn.add_layer(fc2);
+    fcnn.add_layer(softmax);
 
-        auto train_images = mnist_reader::readImage(rel_path_train_images);
-        auto train_labels = mnist_reader::readLable(rel_path_train_labels);
+    Loss* loss = new CrossEntropy;
+    fcnn.add_loss(loss);
+    // train & test
+    SGD opt(learning_rate, 5e-4, 0.9, true);
+    // SGD opt(0.001);
+    for (int epoch = 0; epoch < num_epochs; epoch ++) {
+        shuffle_data(dataset.train_data, dataset.train_labels);
+        for (int start_idx = 0; start_idx < n_train; start_idx += batch_size) {
+            int ith_batch = start_idx / batch_size;
+            Matrix x_batch = dataset.train_data.block(0, start_idx, dim_in,
+                                                      std::min(batch_size, n_train - start_idx));
+            Matrix label_batch = dataset.train_labels.block(0, start_idx, 1,
+                                                            std::min(batch_size, n_train - start_idx));
+            Matrix target_batch = one_hot_encode(label_batch, 10);
+//            if (false && ith_batch % 10 == 1) {
+//                std::cout << ith_batch << "-th grad: " << std::endl;
+//                fcnn.check_gradient(x_batch, target_batch, 10);
+//            }
+            fcnn.forward(x_batch);
+            fcnn.backward(x_batch, target_batch);
+            // display
+            if (ith_batch % 100 == 0 && n_train == 60000) {
+                std::cout << ith_batch << "-th batch, loss: " << fcnn.get_loss()
+                          << std::endl;
+            }
+            // optimize
+            fcnn.update(opt);
+        }
+        // test
+        fcnn.forward(dataset.test_data);
+        float acc = compute_accuracy(fcnn.output(), dataset.test_labels, rel_path_log_file);
 
+        if( n_train == 60000){
+            std::cout << std::endl;
+            std::cout << epoch + 1 << "-th epoch, test acc: " << acc << std::endl;
+            std::cout << std::endl;
+        }
 
-//		auto [test_images, test_labels] = mnist_reader::read(
-//			rel_path_test_images,
-//			rel_path_test_labels
-//		);
-
-    auto test_images = mnist_reader::readImage(rel_path_test_images);
-    auto test_labels = mnist_reader::readLable(rel_path_test_labels);
-
-		cout << "Loaded.\n\n";
-
-		//const auto [random_images, random_labels] = utils::random_subset(train_images, train_labels, 60000);
-
-		const auto x_train = utils::normalize_image_set(train_images);
-		const auto y_train = utils::to_categorical(train_labels);
-
-		const auto x_test = utils::normalize_image_set(test_images);
-		const auto y_test = utils::to_categorical(test_labels);
-
-		const int input_size = x_train[0].size();
-		const int num_classes = y_train[0].size();
-
-		auto model = sequential{input_size, hidden_size, num_classes};
-		model.fit(x_train, y_train, x_test, y_test,  rel_path_log_file, num_epochs, learning_rate, batch_size);
-
-	return 0;
+    }
+    return 0;
 }

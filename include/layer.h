@@ -1,28 +1,30 @@
-#pragma once
+#ifndef SRC_LAYER_H_
+#define SRC_LAYER_H_
+
+#include <Eigen/Core>
 #include <vector>
+#include "./utils.h"
+#include "./optimizer.h"
 
-class layer
-{
-protected:
-	std::vector<double> neurons_;
+class Layer {
+ protected:
+  Matrix top;  // layer output
+  Matrix grad_bottom;  // gradient w.r.t input
 
-public:
-	explicit layer(const int size) : neurons_(size)
-	{
-	}
+ public:
+  virtual ~Layer() {}
 
-	explicit layer(std::vector<double> values) : neurons_{std::move(values)}
-	{
-	}
-
-	layer(const layer& other) = default;
-	layer(layer&& other) noexcept = default;
-	layer& operator=(const layer& other) = default;
-	layer& operator=(layer&& other) noexcept = default;
-	virtual ~layer() = default;
-
-	const auto& neurons() const noexcept { return neurons_; }
-	double operator[](const int index) const { return neurons_[index]; }
-	double& operator[](const int index) { return neurons_[index]; }
-	auto size() const noexcept { return neurons_.size(); }
+  virtual void forward(const Matrix& bottom) = 0;
+  virtual void backward(const Matrix& bottom, const Matrix& grad_top) = 0;
+  virtual void update(Optimizer& opt) {}
+  virtual const Matrix& output() { return top; }
+  virtual const Matrix& back_gradient() { return grad_bottom; }
+  virtual int output_dim() { return -1; }
+  virtual std::vector<float> get_parameters() const
+          { return std::vector<float>(); }
+  virtual std::vector<float> get_derivatives() const
+          { return std::vector<float>(); }
+  virtual void set_parameters(const std::vector<float>& param) {}
 };
+
+#endif  // SRC_LAYER_H_
