@@ -76,6 +76,10 @@ std::tuple<double, double> sequential::evaluate(
         auto posPred = std::distance(pred.begin(), predIter);
         output << " - image " << i << ": Prediction=" << posPred << ". Label=" << posLabel << std::endl;
 
+        for (const auto &x: pred) {
+            std::cout << x << std::endl;
+        }
+
 	}
 	return {loss / x.size(), accuracy / x.size()};
 }

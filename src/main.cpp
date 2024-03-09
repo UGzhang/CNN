@@ -28,15 +28,22 @@ int main(int argc, char* argv[])
 
 		cout << "Loading data...\n";
 
-		auto [train_images, train_labels] = mnist_reader::read(
-			rel_path_train_images,
-			rel_path_train_labels
-		);
+//		auto [train_images, train_labels] = mnist_reader::read(
+//			rel_path_train_images,
+//			rel_path_train_labels
+//		);
 
-		auto [test_images, test_labels] = mnist_reader::read(
-			rel_path_test_images,
-			rel_path_test_labels
-		);
+        auto train_images = mnist_reader::readImage(rel_path_train_images);
+        auto train_labels = mnist_reader::readLable(rel_path_train_labels);
+
+
+//		auto [test_images, test_labels] = mnist_reader::read(
+//			rel_path_test_images,
+//			rel_path_test_labels
+//		);
+
+    auto test_images = mnist_reader::readImage(rel_path_test_images);
+    auto test_labels = mnist_reader::readLable(rel_path_test_labels);
 
 		cout << "Loaded.\n\n";
 
