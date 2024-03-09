@@ -7,7 +7,7 @@ protected:
 	std::vector<double> neurons_;
 
 public:
-	explicit layer(const size_t size) : neurons_(size)
+	explicit layer(const int size) : neurons_(size)
 	{
 	}
 

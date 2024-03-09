@@ -12,7 +12,7 @@ bool sequential::is_accurate(const vec& target, const vec& output)
 	return target[std::distance(begin(output), max)];
 }
 
-sequential::sequential(const size_t input_size, const size_t hidden_size, const size_t output_size)
+sequential::sequential(const int input_size, const int hidden_size, const int output_size)
 	: input_{input_size}, hidden_{input_size, hidden_size}, output_{hidden_size, output_size}
 {
 }
@@ -51,7 +51,7 @@ double sequential::cross_entropy(const vec& target, const vec& output)
 
 std::tuple<double, double> sequential::evaluate(
         const matrix& x,const matrix& y,
-        size_t batch_size, std::string& log_file)
+        int batch_size, std::string& log_file)
 {
 	auto loss = 0.0;
 	auto accuracy = 0.0;
@@ -83,13 +83,12 @@ std::tuple<double, double> sequential::evaluate(
 void sequential::fit(const matrix& x_train, const matrix& y_train,
                      const matrix& x_test, const matrix& y_test,
                      std::string& log_file,
-                     size_t epoch_count, double learning_rate, size_t batch_size)
+                     int epoch_count, double learning_rate, int batch_size)
 {
 	const auto train_size = static_cast<int>(x_train.size());
 	const auto batch_count = static_cast<int>(std::ceil(train_size / double(batch_size)));
 
 	const auto start = std::chrono::system_clock::now();
-    learning_rate *= 200;
 	for (auto epoch = 1; epoch <= epoch_count; epoch++)
 	{
 		for (auto batch = 0; batch < batch_count; batch++)
@@ -100,13 +99,13 @@ void sequential::fit(const matrix& x_train, const matrix& y_train,
 				backward_pass(y_train[batch * batch_size + test]);
 			}
 			adjust_weights(learning_rate / double(batch_size));
-			std::cout << "\repoch #" << std::setw(2) << std::left << epoch
-				<< " batch #" << batch + 1 << "/" << batch_count;
+//			std::cout << "\repoch #" << std::setw(2) << std::left << epoch
+//				<< " batch #" << batch + 1 << "/" << batch_count;
 		}
 
 		const auto [loss, acc] = evaluate(x_test, y_test, batch_size, log_file);
-		std::cout << "\repoch #" << std::setw(2) << std::left << epoch
-			<< " loss: " << loss << ", acc: " << acc << '\n';
+//		std::cout << "\repoch #" << std::setw(2) << std::left << epoch
+//			<< " loss: " << loss << ", acc: " << acc << '\n';
 	}
 
 	const auto finish = std::chrono::system_clock::now();

@@ -17,7 +17,7 @@ void fc_layer::init_weights(const int left_size, const int right_size, const dou
 	}
 }
 
-fc_layer::fc_layer(const size_t prev_size, const size_t size)
+fc_layer::fc_layer(const int prev_size, const int size)
 	: layer(size)
 {
 	if (prev_size == 0u) return;
@@ -38,16 +38,19 @@ void fc_layer::adjust_weights(const double learning_rate)
 	bias_.value -= learning_rate * bias_.delta;
 	bias_.delta = 0.0;
 }
-
+#include <iostream>
 void fc_layer::forward(const layer& prev)
 {
 #pragma omp parallel for
+
+    double minValue = 0;
 	for (auto i = 0; i < neurons_.size(); i++)
 	{
 		neurons_[i] = bias_.value;
 		for (auto j = 0; j < prev.size(); j++)
 		{
 			neurons_[i] += prev[j] * weights_[i][j].value;
+
 		}
 	}
 	apply_activation_function();

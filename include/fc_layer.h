@@ -11,7 +11,7 @@ class fc_layer : public layer
 
 	virtual void apply_activation_function() = 0;
 	virtual void compute_derivatives(const fc_layer& next) = 0;
-	void init_weights(int left_size, int right_size, double mean = 0.0, double sigma = 0.2);
+	void init_weights(int left_size, int right_size, double mean = 0.0, double sigma = 1    );
 
 protected:
 	std::vector<double> derivative_;
@@ -19,7 +19,7 @@ protected:
 	variable bias_ = {0, 0};
 
 public:
-	explicit fc_layer(size_t prev_size, size_t size);
+	explicit fc_layer(int prev_size, int size);
 
 	void adjust_weights(double learning_rate);
 	void forward(const layer& prev);

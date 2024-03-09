@@ -15,9 +15,9 @@ int main(int argc, char* argv[])
 
     ConfigHandle.init(Config);
 
-    size_t num_epochs = ConfigHandle.read("num_epochs", 0);
-    size_t batch_size = ConfigHandle.read("batch_size", 0);
-    size_t hidden_size = ConfigHandle.read("hidden_size", 0);
+    int num_epochs = ConfigHandle.read("num_epochs", 0);
+    int batch_size = ConfigHandle.read("batch_size", 0);
+    int hidden_size = ConfigHandle.read("hidden_size", 0);
     double learning_rate = ConfigHandle.read("learning_rate", 0.0);
     std::string rel_path_train_images = ConfigHandle.read("rel_path_train_images", std::string{});
     std::string rel_path_train_labels = ConfigHandle.read("rel_path_train_labels", std::string{});
@@ -48,8 +48,8 @@ int main(int argc, char* argv[])
 		const auto x_test = utils::normalize_image_set(test_images);
 		const auto y_test = utils::to_categorical(test_labels);
 
-		const auto input_size = x_train[0].size();
-		const auto num_classes = y_train[0].size();
+		const int input_size = x_train[0].size();
+		const int num_classes = y_train[0].size();
 
 		auto model = sequential{input_size, hidden_size, num_classes};
 		model.fit(x_train, y_train, x_test, y_test,  rel_path_log_file, num_epochs, learning_rate, batch_size);

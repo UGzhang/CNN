@@ -20,11 +20,11 @@ class sequential
 	static bool is_accurate(const vec& target, const vec& output);
 public:
 
-	explicit sequential(size_t input_size, size_t hidden_size, size_t output_size);
-	std::tuple<double, double> evaluate(const matrix& x, const matrix& y, size_t batch_size, std::string& log_file);
+	explicit sequential(int input_size, int hidden_size, int output_size);
+	std::tuple<double, double> evaluate(const matrix& x, const matrix& y, int batch_size, std::string& log_file);
 	void fit(const matrix& x_train, const matrix& y_train,
 	         const matrix& x_test, const matrix& y_test,
              std::string& log_file,
-	         size_t epoch_count = 10, double learning_rate = 0.1,
-             size_t batch_size = 50);
+	         int epoch_count = 10, double learning_rate = 0.1,
+             int batch_size = 50);
 };

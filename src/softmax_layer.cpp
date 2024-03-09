@@ -28,7 +28,7 @@ void softmax_layer::compute_derivatives(const fc_layer& next)
 	}
 }
 
-softmax_layer::softmax_layer(const size_t prev_size, const size_t size)
+softmax_layer::softmax_layer(const int prev_size, const int size)
 	: fc_layer{prev_size, size}
 {
 }
