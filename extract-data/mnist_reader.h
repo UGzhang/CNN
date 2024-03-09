@@ -15,8 +15,8 @@ namespace mnist_reader
 		return s;
 	}
 
-	static std::tuple<vector<vector<uint8_t>>, vector<uint8_t>> read(std::string& image_file,
-	                                                                 std::string& label_file)
+	static std::tuple<vector<vector<uint8_t>>, vector<uint8_t>> read(const std::string& image_file,
+	                                                                 const std::string& label_file)
 	{
 		std::ifstream ifs_images(image_file.data(), std::ifstream::in | std::ifstream::binary);
 		if (!ifs_images.is_open()) throw std::runtime_error("Can't open image file '"s + image_file + "'."s);
@@ -51,7 +51,7 @@ namespace mnist_reader
 		return {images, labels};
 	}
 
-    static vector<uint8_t> readLable(std::string& label_file)
+    static vector<uint8_t> readLable(const std::string& label_file)
     {
 
 
@@ -73,7 +73,7 @@ namespace mnist_reader
         return  labels;
     }
 
-    static vector<vector<uint8_t>> readImage(std::string& image_file)
+    static vector<vector<uint8_t>> readImage(const std::string& image_file)
     {
         std::ifstream ifs_images(image_file.data(), std::ifstream::in | std::ifstream::binary);
         if (!ifs_images.is_open()) throw std::runtime_error("Can't open image file '"s + image_file + "'."s);
