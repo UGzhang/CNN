@@ -25,9 +25,9 @@ class FullyConnected : public Layer {
   void backward(const Matrix& bottom, const Matrix& grad_top);
   void update(Optimizer& opt);
   int output_dim() { return dim_out; }
-  std::vector<float> get_parameters() const;
-  std::vector<float> get_derivatives() const;
-  void set_parameters(const std::vector<float>& param);
+  std::vector<double> get_parameters() const;
+  std::vector<double> get_derivatives() const;
+  void set_parameters(const std::vector<double>& param);
 };
 
 #endif  // SRC_LAYER_FULLY_CONNECTED_H_

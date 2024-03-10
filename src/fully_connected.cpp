@@ -39,8 +39,8 @@ void FullyConnected::update(Optimizer& opt) {
   opt.update(bias_vec, grad_bias_vec);
 }
 
-std::vector<float> FullyConnected::get_parameters() const {
-  std::vector<float> res(weight.size() + bias.size());
+std::vector<double> FullyConnected::get_parameters() const {
+  std::vector<double> res(weight.size() + bias.size());
   // Copy the data of weights and bias to a long vector
   std::copy(weight.data(), weight.data() + weight.size(), res.begin());
   std::copy(bias.data(), bias.data() + bias.size(),
@@ -48,15 +48,15 @@ std::vector<float> FullyConnected::get_parameters() const {
   return res;
 }
 
-void FullyConnected::set_parameters(const std::vector<float>& param) {
+void FullyConnected::set_parameters(const std::vector<double>& param) {
   if (static_cast<int>(param.size()) != weight.size() + bias.size())
       throw std::invalid_argument("Parameter size does not match");
   std::copy(param.begin(), param.begin() + weight.size(), weight.data());
   std::copy(param.begin() + weight.size(), param.end(), bias.data());
 }
 
-std::vector<float> FullyConnected::get_derivatives() const {
-  std::vector<float> res(grad_weight.size() + grad_bias.size());
+std::vector<double> FullyConnected::get_derivatives() const {
+  std::vector<double> res(grad_weight.size() + grad_bias.size());
   // Copy the data of weights and bias to a long vector
   std::copy(grad_weight.data(), grad_weight.data() + grad_weight.size(),
             res.begin());

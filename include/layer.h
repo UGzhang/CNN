@@ -20,11 +20,11 @@ class Layer {
   virtual const Matrix& output() { return top; }
   virtual const Matrix& back_gradient() { return grad_bottom; }
   virtual int output_dim() { return -1; }
-  virtual std::vector<float> get_parameters() const
-          { return std::vector<float>(); }
-  virtual std::vector<float> get_derivatives() const
-          { return std::vector<float>(); }
-  virtual void set_parameters(const std::vector<float>& param) {}
+  virtual std::vector<double> get_parameters() const
+          { return std::vector<double>(); }
+  virtual std::vector<double> get_derivatives() const
+          { return std::vector<double>(); }
+  virtual void set_parameters(const std::vector<double>& param) {}
 };
 
 #endif  // SRC_LAYER_H_

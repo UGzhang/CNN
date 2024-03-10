@@ -7,15 +7,15 @@
 #include <random>
 #include <fstream>
 
-typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> Matrix;
-typedef Eigen::Matrix<float, Eigen::Dynamic, 1> Vector;
-typedef Eigen::Array<float, 1, Eigen::Dynamic> RowVector;
+typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> Matrix;
+typedef Eigen::Matrix<double, Eigen::Dynamic, 1> Vector;
+typedef Eigen::Array<double, 1, Eigen::Dynamic> RowVector;
 
 static std::default_random_engine generator;
 
 // Normal distribution: N(mu, sigma^2)
-inline void set_normal_random(float* arr, int n, float mu, float sigma) {
-  std::normal_distribution<float> distribution(mu, sigma);
+inline void set_normal_random(double* arr, int n, double mu, double sigma) {
+  std::normal_distribution<double> distribution(mu, sigma);
   for (int i = 0; i < n; i ++) {
     arr[i] = distribution(generator);
   }
@@ -42,9 +42,9 @@ inline Matrix one_hot_encode(const Matrix& y, int n_value) {
 }
 
 // classification accuracy
-inline float compute_accuracy(const Matrix& preditions, const Matrix& labels, const std::string& output) {
+inline double compute_accuracy(const Matrix& preditions, const Matrix& labels, const std::string& output) {
   int n = preditions.cols();
-  float acc = 0;
+  double acc = 0;
   int batch = 0;
 
   std::ofstream log(output);

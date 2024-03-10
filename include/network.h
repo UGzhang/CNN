@@ -32,13 +32,13 @@ class Network {
   void update(Optimizer& opt);
 
   const Matrix& output() { return layers.back()->output(); }
-  float get_loss() { return loss->output(); }
+  double get_loss() { return loss->output(); }
   /// Get the serialized layer parameters
-  std::vector<std::vector<float> > get_parameters() const;
+  std::vector<std::vector<double> > get_parameters() const;
   /// Set the layer parameters
-  void set_parameters(const std::vector< std::vector<float> >& param);
+  void set_parameters(const std::vector< std::vector<double> >& param);
   /// Get the serialized derivatives of layer parameters
-  std::vector<std::vector<float> > get_derivatives() const;
+  std::vector<std::vector<double> > get_derivatives() const;
   /// Debugging tool to check parameter gradients
   void check_gradient(const Matrix& input, const Matrix& target, int n_points,
                       int seed = -1);

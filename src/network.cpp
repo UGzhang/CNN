@@ -35,9 +35,9 @@ void Network::update(Optimizer& opt) {
   }
 }
 
-std::vector<std::vector<float> > Network::get_parameters() const {
+std::vector<std::vector<double> > Network::get_parameters() const {
   const int n_layer = layers.size();
-  std::vector< std::vector<float> > res;
+  std::vector< std::vector<double> > res;
   res.reserve(n_layer);
   for (int i = 0; i < n_layer; i++) {
     res.push_back(layers[i]->get_parameters());
@@ -45,7 +45,7 @@ std::vector<std::vector<float> > Network::get_parameters() const {
   return res;
 }
 
-void Network::set_parameters(const std::vector< std::vector<float> >& param) {
+void Network::set_parameters(const std::vector< std::vector<double> >& param) {
   const int n_layer = layers.size();
   if (static_cast<int>(param.size()) != n_layer)
       throw std::invalid_argument("Parameter size does not match");
@@ -54,9 +54,9 @@ void Network::set_parameters(const std::vector< std::vector<float> >& param) {
   }
 }
 
-std::vector<std::vector<float> > Network::get_derivatives() const {
+std::vector<std::vector<double> > Network::get_derivatives() const {
   const int n_layer = layers.size();
-  std::vector< std::vector<float> > res;
+  std::vector< std::vector<double> > res;
   res.reserve(n_layer);
   for (int i = 0; i < n_layer; i++) {
     res.push_back(layers[i]->get_derivatives());
@@ -71,10 +71,10 @@ void Network::check_gradient(const Matrix& input, const Matrix& target,
 
   this->forward(input);
   this->backward(input, target);
-  std::vector< std::vector<float> > param = this->get_parameters();
-  std::vector< std::vector<float> > deriv = this->get_derivatives();
+  std::vector< std::vector<double> > param = this->get_parameters();
+  std::vector< std::vector<double> > deriv = this->get_derivatives();
 
-  const float eps = 1e-4;
+  const double eps = 1e-4;
   const int n_layer = deriv.size();
   for (int i = 0; i < n_points; i++) {
     // Randomly select a layer
@@ -84,21 +84,21 @@ void Network::check_gradient(const Matrix& input, const Matrix& target,
     if (n_param < 1)  continue;
     const int param_id = int(std::rand() / double(RAND_MAX) * n_param);
     // Turbulate the parameter a little bit
-    const float old = param[layer_id][param_id];
+    const double old = param[layer_id][param_id];
 
     param[layer_id][param_id] -= eps;
     this->set_parameters(param);
     this->forward(input);
     this->backward(input, target);
-    const float loss_pre = loss->output();
+    const double loss_pre = loss->output();
 
     param[layer_id][param_id] += eps * 2;
     this->set_parameters(param);
     this->forward(input);
     this->backward(input, target);
-    const float loss_post = loss->output();
+    const double loss_post = loss->output();
 
-    const float deriv_est = (loss_post - loss_pre) / eps / 2;
+    const double deriv_est = (loss_post - loss_pre) / eps / 2;
 
     std::cout << "[layer " << layer_id << ", param " << param_id <<
     "] deriv = " << deriv[layer_id][param_id] << ", est = " << deriv_est <<

@@ -32,7 +32,7 @@ void MNIST::read_mnist_data(std::string filename, Matrix& data) {
         for (int c = 0; c < n_cols; c++) {
           unsigned char image = 0;
           file.read((char*)&image, sizeof(image));
-          data(r * n_cols + c, i) = (float)image/255;
+          data(r * n_cols + c, i) = (double)image/255.0;
         }
       }
     }
@@ -53,7 +53,7 @@ void MNIST::read_mnist_label(std::string filename, Matrix& labels) {
     for (int i = 0; i < number_of_images; i++) {
       unsigned char label = 0;
       file.read((char*)&label, sizeof(label));
-      labels(0, i) = (float)label;
+      labels(0, i) = (double)label;
     }
   }
 }
