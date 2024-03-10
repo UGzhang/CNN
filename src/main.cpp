@@ -88,11 +88,10 @@ int main(int argc, char* argv[])
             // test
             fcnn.forward(dataset.test_data);
             float acc = compute_accuracy(fcnn.output(), dataset.test_labels, rel_path_log_file);
-
-            if( n_train != 1){
-                std::cout << epoch + 1 << "-th epoch, test acc: " << acc << std::endl;
-                std::cout << std::endl;
-            }
+//            if( n_train != 1){
+//                std::cout << epoch + 1 << "-th epoch, test acc: " << acc << std::endl;
+//                std::cout << std::endl;
+//            }
 
         }
     } else{
@@ -118,7 +117,7 @@ int main(int argc, char* argv[])
         } else{
             dataset.readLabel(inputPath, true);
 
-            int label = dataset.train_labels(0,0);
+            int label = dataset.train_labels(0,index);
             Matrix y_onehot = Matrix::Zero(10, 1);
             y_onehot(label,0) = 1;
             output << 1 << "\n";

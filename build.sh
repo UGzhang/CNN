@@ -1,4 +1,4 @@
-echo "This script should build your project now..."
+echo "build..."
 #!/bin/bash
 if [ ! -d "build" ];then
   mkdir build
