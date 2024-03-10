@@ -1,9 +1,4 @@
 echo "This script should trigger the training and testing of your neural network implementation..."
 #!/bin/bash
-mkdir build
-cd build
-cmake ..
-make
-cd ../
+sh build.sh
 exec ./AdvPT $1
-rm -rf build

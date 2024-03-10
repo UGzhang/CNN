@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "./utils.h"
+#include "utils.h"
 
 class MNIST {
 

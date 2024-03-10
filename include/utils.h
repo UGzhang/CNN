@@ -1,7 +1,7 @@
 #ifndef SRC_UTILS_H_
 #define SRC_UTILS_H_
 
-#include <Eigen/Core>
+#include "Eigen/Core"
 #include <algorithm>
 #include <iostream>
 #include <random>
@@ -45,9 +45,9 @@ inline Matrix one_hot_encode(const Matrix& y, int n_value) {
 inline float compute_accuracy(const Matrix& preditions, const Matrix& labels, const std::string& output) {
   int n = preditions.cols();
   float acc = 0;
-    int batch = 0;
-  std::ofstream log(output);
+  int batch = 0;
 
+  std::ofstream log(output);
   for (int i = 0; i < n; i ++) {
       if(i %  labels.size() == 0){
           log << "Current batch: " << batch << "\n";
@@ -55,7 +55,7 @@ inline float compute_accuracy(const Matrix& preditions, const Matrix& labels, co
       }
 
     Matrix::Index max_index;
-    float max_value = preditions.col(i).maxCoeff(&max_index);
+    preditions.col(i).maxCoeff(&max_index);
     acc += int(max_index) == labels(i);
       log << " - image " << i << ": Prediction=" << int(max_index) << ". Label=" << labels(i) << std::endl;
 
