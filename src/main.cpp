@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
             output << 1 << "\n";
             output << 10 << "\n";
 
-            output << y_onehot << "\n";
+            output << y_onehot;
             output << std::endl;
         }
     }
