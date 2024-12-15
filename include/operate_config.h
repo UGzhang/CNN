@@ -16,8 +16,7 @@
 #define ConfigHandle operatorconfig::CConfig::GetInstance()
 
 namespace operatorconfig {
-// Exception types
-// 尽量不要将一个嵌套类声明为public，把嵌套类置于名字空间中是更好的方式。
+
 class File_not_found {
 public:
 	std::string filename;
@@ -37,20 +36,11 @@ public:
 	void init(std::string filename, std::string delimiter = "=", std::string comment = "#");
 	template<typename T> T read(const std::string &in_key) const;	//<! Searchfor key and read value or optional default value, call as read<T> 
 	template<typename T> T read(const std::string &in_key, const T &in_value) const;
-	template<typename T> bool readInto(T &out_var, const std::string &in_key) const;
-	template<typename T> bool readInto(T &out_var, const std::string &in_key, const T &in_value) const;
-	bool fileExist(std::string &filename);
-	void readFile(std::string &filename, std::string delimiter="=", std::string comment = "#");
-	// Check whether key exists in configuration
-	bool keyExists(const std::string &in_key) const;
 
 	// Modify keys and values
 	template<class T> void add(const std::string &in_key, const T& in_value);
-	void remove(const std::string &in_key);
 
 	// Check or change configuration syntax
-	std::string getDelimiter(void) const { return m_Delimiter; }
-	std::string getComment(void) const { return m_Comment; }
 	std::string setDelimiter(const std::string &in_s) { 
 		std::string old = m_Delimiter; m_Delimiter = in_s; return old;
 	}
@@ -151,33 +141,6 @@ T CConfig::read(const std::string &key, const T &value) const {
 	return string_as_T<T>( p->second);
 }
 
-template<typename T>
-bool CConfig::readInto(T &var, const std::string& key) const {
-	// Get the value corresponding to key and store in var  
-	// Return true if key is found  
-	// Otherwise leave var untouched  
-	mapci p = m_Contents.find(key);
-	bool found = (p != m_Contents.end());
-	if (found) {
-		var = string_as_T<T>( p->second );
-	}
-	return found;
-}
-
-template<typename T> 
-bool CConfig::readInto(T &var, const std::string &key, const T &value) const {
-	// Get the value corresponding to key and store in var 
-	// Return true if key is found
-	// Otherwise set var to given default
-	mapci p = m_Contents.find(key);
-	bool found = (p != m_Contents.end());
-	if (found) {
-		var = string_as_T<T>( p->second );
-	} else {
-		var = value;
-	}
-	return found;
-}
 
 template<typename T>
 void CConfig::add(const std::string &in_key, const T &value) {

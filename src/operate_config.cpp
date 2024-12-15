@@ -36,11 +36,6 @@ void CConfig::init(std::string filename, std::string delimiter, std::string comm
 	in.close();		// auto release 
 }
 
-bool CConfig::keyExists(const std::string &key) const {
-	// Indicate wherher key is found
-	mapci p = m_Contents.find(key);
-	return (p != m_Contents.end());
-}
 
 /* Static */
 void CConfig::Trim(std::string &inout_s) {
@@ -50,30 +45,6 @@ void CConfig::Trim(std::string &inout_s) {
 	inout_s.erase(inout_s.find_last_not_of(whitespace) + 1U);
 }
 
-void CConfig::remove(const std::string &key) {
-	// Remove key and its value
-	m_Contents.erase(m_Contents.find(key));
-	return;
-}
-
-bool CConfig::fileExist(std::string &filename) {
-	bool exist = false;
-	std::ifstream in(filename.c_str());
-	if (in) {
-		exist = true;
-		//in.close();	// auto release
-	}
-	return exist;
-}
-
-void CConfig::readFile(std::string &filname, std::string delimiter, std::string comment) {
-	m_Delimiter = delimiter;
-	m_Comment = comment;
-	std::ifstream in(filname.c_str());
-	if (!in) throw File_not_found(filname);
-	in >> (*this);
-	in.close();			// auto release 
-}
 
 std::ostream& operator<<(std::ostream &os, const CConfig  &cf) {
 	// Save a Config to os
